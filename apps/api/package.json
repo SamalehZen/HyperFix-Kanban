@@ -51,7 +51,7 @@
     "ioredis": "^5.10.1",
     "octokit": "^5.0.5",
     "pg": "^8.20.0",
-    "valibot": "^1.2.0",
+    "valibot": "^1.4.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
