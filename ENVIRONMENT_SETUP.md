@@ -1,0 +1,208 @@
+# Environment Setup Guide
+
+This guide will help you set up the Kaneo development environment and troubleshoot common issues.
+
+## Quick Start
+
+1. **Create a `.env` file** in the root of the project with the required environment variables (see the [documentation](https://kaneo.app/docs/core/installation/environment-variables) for the complete list).
+
+2. **Start the development servers**:
+   ```bash
+   pnpm dev
+   ```
+
+This starts both the API (port 1337) and web app (port 5173). Both will automatically reload when you make changes.
+
+> **Tip**: The web app at http://localhost:5173 will automatically connect to the API at http://localhost:1337
+
+## Environment Variables
+
+Kaneo uses a **single `.env` file** in the root of the project for all environment variables. This file is shared by both the API and web services.
+
+### Required Variables
+
+For development, you'll need at minimum:
+
+- `KANEO_CLIENT_URL` - The URL of the web application (e.g., `http://localhost:5173`)
+- `KANEO_API_URL` - The URL of the API (e.g., `http://localhost:1337`)
+- `AUTH_SECRET` - Secret key for JWT token generation (**must be at least 32 characters long**; use a long, random value in production)
+- `DEVICE_AUTH_CLIENT_IDS` - **Optional.** Comma-separated list of allowed device-flow OAuth client IDs. When unset, Kaneo implicitly allows `kaneo-cli` and `kaneo-mcp` by default (no extra configuration for the CLI or MCP). Override only when you need additional trusted clients, for example `kaneo-cli,kaneo-mcp,my-desktop-app`.
+- `DATABASE_URL` - PostgreSQL connection string
+- `POSTGRES_DB` - PostgreSQL database name
+- `POSTGRES_USER` - PostgreSQL username
+- `POSTGRES_PASSWORD` - PostgreSQL password
+
+If your app uses a device client ID that is not included in the defaults, set `DEVICE_AUTH_CLIENT_IDS` to the full comma-separated list of allowed IDs (including any defaults you still need), so it includes the client ID your app sends to `/api/auth/device/code`.
+
+### Development-Specific Variables
+
+For local development, the web app also supports:
+- `VITE_API_URL` - API URL for development (defaults to `http://localhost:1337` if not set)
+- `VITE_APP_URL` - App URL for generating links (optional)
+
+### Optional Variables
+
+Kaneo supports many optional configuration options including:
+- SSO providers (GitHub OAuth via `GITHUB_OAUTH_CLIENT_ID` / `GITHUB_OAUTH_CLIENT_SECRET`, Google, Discord, Custom OAuth/OIDC)
+- GitHub repository integration (GitHub App: `GITHUB_APP_ID`, `GITHUB_PRIVATE_KEY`, `GITHUB_WEBHOOK_SECRET`, optional `GITHUB_APP_NAME`) — separate from GitHub SSO
+- SMTP configuration for email
+- Access control settings
+- CORS configuration
+- Redis for horizontal scaling
+
+#### Registration / Access Control
+
+- `DISABLE_REGISTRATION` — Set to `true` to disable public sign-up. When enabled, account creation only succeeds through a valid workspace invitation (the invited email plus a matching `invitationId` are required). Invitation acceptance, sign-in, and OAuth flows still work; only direct sign-up is blocked. Defaults to `false`.
+- `DISABLE_PASSWORD_REGISTRATION` — Set to `true` to block the email/password sign-up endpoint specifically. Useful when only social/OIDC sign-up should be allowed. Defaults to `false`.
+- `DISABLE_GUEST_ACCESS` — Set to `true` to disable the anonymous "guest" sign-in plugin. Defaults to `false`.
+- `WORKSPACE_CREATION_ALLOWED_EMAILS` — Comma-separated list of emails permitted to create new workspaces. When empty/unset, all authenticated users may create workspaces (current behaviour). When set, only listed emails can create workspaces — both via the Better Auth organization API and via the UI. Comparison is case-insensitive and trimmed. Example: `owner@example.com, admin@example.com`. Existing workspace owners/admins always retain control over the workspaces they already own.
+
+#### Redis Configuration
+
+Kaneo supports three Redis deployment modes for WebSocket Pub/Sub. When any Redis mode is configured, WebSocket broadcasts use Redis Pub/Sub, allowing multiple API instances to relay real-time updates. When none are set, an in-memory adapter is used (single-instance only).
+
+**Standalone (single server):**
+- `REDIS_URL` - Redis connection string (e.g., `redis://localhost:6379`)
+
+**Sentinel (high-availability with automatic failover):**
+- `REDIS_SENTINELS` - Comma-separated list of Sentinel nodes (e.g., `sentinel-1:26379,sentinel-2:26379,sentinel-3:26379`)
+- `REDIS_SENTINEL_MASTER_NAME` - Name of the Sentinel master group (default: `mymaster`)
+- `REDIS_SENTINEL_PASSWORD` - Password for Sentinel instances, if different from the Redis password (optional)
+- `REDIS_SENTINEL_TLS` - Set to `true` to enable TLS for Sentinel connections (default: `false`)
+
+**Cluster (horizontal sharding):**
+- `REDIS_CLUSTER_NODES` - Comma-separated list of cluster seed nodes (e.g., `node-1:6379,node-2:6379,node-3:6379`)
+
+**Shared (used by Sentinel and Cluster modes):**
+- `REDIS_PASSWORD` - Password for the Redis data nodes (used by both Sentinel and Cluster modes, not for Sentinel auth itself — use `REDIS_SENTINEL_PASSWORD` for that)
+
+> **Note:** Only one mode should be configured at a time. If multiple are set, the priority is: Cluster > Sentinel > Standalone.
+
+#### SMTP Configuration
+
+For sending emails (workspace invitations, magic links, etc.), configure these variables:
+- `SMTP_HOST` - SMTP server hostname
+- `SMTP_PORT` - SMTP server port
+- `SMTP_USER` - SMTP username
+- `SMTP_PASSWORD` - SMTP password
+- `SMTP_FROM` - From email address
+- `SMTP_SECURE` - Use TLS (default: `true`, set to `false` to disable)
+- `SMTP_REQUIRE_TLS` - Require TLS (default: `false`, set to `true` to require)
+- `SMTP_IGNORE_TLS` - Ignore TLS certificate errors (default: `false`, set to `true` for self-signed certificates)
+
+> **Note:** If you're using an SMTP server with a self-signed or invalid TLS certificate, set `SMTP_IGNORE_TLS=true` to bypass certificate validation.
+
+For a complete list of all environment variables, their descriptions, and configuration options, see the [official documentation](https://kaneo.app/docs/core/installation/environment-variables).
+
+## Common Issues & Troubleshooting
+
+### CORS Errors
+
+**Symptoms:**
+- "Failed to fetch" errors in browser console
+- Network errors when making API requests
+- "Access to fetch at '...' from origin '...' has been blocked by CORS policy"
+
+**Solutions:**
+
+1. **Check URL Configuration:**
+   - Ensure `KANEO_API_URL` matches your API server URL
+   - Ensure `KANEO_CLIENT_URL` matches your web app URL
+   - For development, you can also set `VITE_API_URL` in your `.env` file
+
+2. **Configure CORS Origins:**
+   - Add your frontend URL to `CORS_ORIGINS` in your `.env`:
+     ```
+     CORS_ORIGINS=http://localhost:5173,https://yourdomain.com
+     ```
+   - For development, you can leave `CORS_ORIGINS` empty to allow all origins
+   - **Note:** `CORS_ORIGINS` should match `KANEO_CLIENT_URL` for proper authentication
+
+3. **Check Protocol Consistency:**
+   - Ensure both frontend and API use the same protocol (http/https)
+   - Don't mix http and https in development
+
+4. **Verify Server Accessibility:**
+   - Test if the API is accessible: `curl http://localhost:1337/config`
+   - Check if the server is running on the correct port
+
+### Database Connection Issues
+
+**Symptoms:**
+- "Database connection failed" errors
+- API server won't start
+
+**Solutions:**
+
+1. **Check PostgreSQL:**
+   - Ensure PostgreSQL is running
+   - Verify database exists and credentials are correct
+   - Test connection: `psql $DATABASE_URL`
+
+2. **Update DATABASE_URL:**
+   - Ensure the connection string format is correct
+   - Check username, password, host, port, and database name
+
+### Authentication Issues
+
+**Symptoms:**
+- "Authentication failed" errors
+- Users can't sign in
+
+**Solutions:**
+
+1. **Check Authentication Configuration:**
+   - Ensure `AUTH_SECRET` is set in your `.env` file
+   - Use a strong secret in production
+   - Verify `KANEO_CLIENT_URL` and `KANEO_API_URL` are correctly configured
+
+2. **Clear Browser Data:**
+   - Clear cookies and local storage
+   - Try in incognito/private mode
+
+### Network Errors
+
+**Symptoms:**
+- "Network error" messages
+- API requests timeout
+
+**Solutions:**
+
+1. **Check Server Status:**
+   - Verify API server is running
+   - Check server logs for errors
+
+2. **Check Firewall/Proxy:**
+   - Ensure ports are not blocked
+   - Check if proxy settings interfere
+
+3. **Verify URLs:**
+   - Check that all URLs are accessible
+   - Test with curl or browser
+
+## Development vs Production
+
+### Development
+- Use `http://localhost` for both frontend and API
+- Leave `CORS_ORIGINS` empty to allow all origins (or set it to match your local URLs)
+- Use simple secrets for `AUTH_SECRET` (not for production)
+- The web app will use `VITE_API_URL` if set, otherwise defaults to `http://localhost:1337`
+
+### Production
+- Use HTTPS for both frontend and API
+- Set specific `CORS_ORIGINS` for security (should match `KANEO_CLIENT_URL`)
+- Use strong, unique secrets for `AUTH_SECRET`
+- Configure proper database credentials
+- Ensure `KANEO_CLIENT_URL` and `KANEO_API_URL` are set to your production URLs
+
+## Getting Help
+
+If you're still experiencing issues:
+
+1. Check the browser console for detailed error messages
+2. Review the API server logs
+3. Verify all environment variables are set correctly
+4. Ensure all services (PostgreSQL, API, Frontend) are running
+5. Consult the [official documentation](https://kaneo.app/docs) for detailed guides and troubleshooting
+
+For the most up-to-date information on environment variables and configuration, always refer to the [official documentation](https://kaneo.app/docs/core/installation/environment-variables).

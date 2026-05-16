@@ -1,0 +1,60 @@
+{
+  "name": "kaneo",
+  "private": false,
+  "type": "module",
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "i18n:check": "node ./scripts/i18n/check.mjs",
+    "i18n:check:fix": "node ./scripts/i18n/check.mjs --fix",
+    "i18n:report": "node ./scripts/i18n/report.mjs",
+    "i18n:report:fix": "node ./scripts/i18n/report.mjs --fix",
+    "i18n:schema": "node ./scripts/i18n/schema.mjs",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "test:integration": "pnpm --filter @kaneo/api test:integration",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.4.8",
+    "@commitlint/cli": "^19.6.1",
+    "@commitlint/config-conventional": "^19.6.0",
+    "esbuild": "0.27.3",
+    "husky": "^9.1.7",
+    "linkifyjs": ">=4.3.2",
+    "tar-fs": ">=3.1.1",
+    "turbo": "^2.7.2",
+    "typescript": "5.8.3"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "@isaacs/brace-expansion": "5.0.1",
+      "@hono/node-server": "1.19.13",
+      "ajv": "8.18.0",
+      "diff": "8.0.3",
+      "esbuild": "0.27.3",
+      "express-rate-limit": "8.2.2",
+      "hono": "4.12.14",
+      "lodash": "4.18.0",
+      "markdown-it": "14.1.1",
+      "minimatch": "10.2.3",
+      "rollup": "4.59.0",
+      "seroval": "1.4.1",
+      "effect": ">=3.20.0",
+      "fast-xml-parser": ">=5.5.7",
+      "socket.io-parser": ">=4.2.6",
+      "picomatch": ">=4.0.4",
+      "path-to-regexp": ">=8.4.0",
+      "brace-expansion": ">=5.0.5",
+      "yaml": ">=2.8.3"
+    }
+  },
+  "packageManager": "pnpm@10.32.1",
+  "version": "2.7.2",
+  "dependencies": {
+    "dotenv-mono": "^1.5.1"
+  }
+}
