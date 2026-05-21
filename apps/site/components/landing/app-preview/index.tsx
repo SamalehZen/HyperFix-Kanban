@@ -99,7 +99,7 @@ function MockSidebar({
                   sideOffset={4}
                 >
                   <DropdownMenuGroup>
-                    <DropdownMenuLabel>Workspaces</DropdownMenuLabel>
+                    <DropdownMenuLabel>Espaces de travail</DropdownMenuLabel>
                     <DropdownMenuItem className="h-7 text-sm data-highlighted:bg-sidebar-accent">
                       {MOCK_WORKSPACE.name}
                     </DropdownMenuItem>
@@ -107,7 +107,7 @@ function MockSidebar({
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
                     <DropdownMenuItem className="h-7 text-sm data-highlighted:bg-sidebar-accent">
-                      Add workspace
+                      Ajouter un espace de travail
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                 </DropdownMenuContent>
@@ -138,7 +138,7 @@ function MockSidebar({
                 size={16}
               />
               <span className="font-normal text-muted-foreground/70">
-                Search
+                Rechercher
               </span>
             </span>
             <kbd className="-me-0.5 ms-6 inline-flex h-4 max-h-full items-center rounded border border-border/70 bg-background px-1 font-[inherit] font-medium text-[0.625rem] text-muted-foreground/60">
@@ -157,13 +157,13 @@ function MockSidebar({
                 <SidebarGroupLabel className="h-7 cursor-pointer justify-between px-0 text-sidebar-accent-foreground" />
               }
             >
-              <span>Overview</span>
+              <span>Aperçu</span>
               <ChevronRight className="h-3.5 w-3.5 text-sidebar-foreground/60 transition-transform duration-200" />
             </CollapsibleTrigger>
             <CollapsiblePanel>
               <SidebarGroupContent>
                 <SidebarMenu className="gap-0.5">
-                  {["Projects", "Members", "Invitations"].map((title) => (
+                  {["Projets", "Membres", "Invitations"].map((title) => (
                     <SidebarMenuItem key={title}>
                       <SidebarMenuButton
                         size="default"
@@ -189,7 +189,7 @@ function MockSidebar({
                 <SidebarGroupLabel className="h-7 cursor-pointer justify-between px-0 text-sidebar-accent-foreground" />
               }
             >
-              <span>Projects</span>
+              <span>Projets</span>
               <ChevronRight className="h-3.5 w-3.5 text-sidebar-foreground/60 transition-transform duration-200" />
             </CollapsibleTrigger>
             <CollapsiblePanel>
@@ -329,7 +329,7 @@ export function AppPreview() {
                       )}
                     >
                       <SquircleDashed className="size-3.5" />
-                      Backlog
+                      Carnet
                     </Button>
                     <Button
                       variant={viewMode === "board" ? "secondary" : "ghost"}
@@ -341,7 +341,7 @@ export function AppPreview() {
                       )}
                     >
                       <SquareKanban className="size-3.5" />
-                      Board
+                      Tableau
                     </Button>
                   </div>
                 </div>

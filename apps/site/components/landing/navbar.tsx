@@ -4,105 +4,16 @@ import { Logo } from "@/components/landing/logo";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
-  NavigationMenuContent,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
 
-type LinkItem = {
-  href: string;
-  label: string;
-  description?: string;
-};
-
-type NavigationLink =
-  | {
-      href: string;
-      label: string;
-      submenu?: false;
-    }
-  | {
-      label: string;
-      submenu: true;
-      type: "description" | "simple";
-      items: LinkItem[];
-    };
-
-const navigationLinks: NavigationLink[] = [
-  {
-    items: [
-      {
-        description:
-          "Understand the product model and day-to-day workflows end to end.",
-        href: "/docs/core/functional",
-        label: "Functional Guides",
-      },
-      {
-        description:
-          "Set up your workspace structure and initial project configuration.",
-        href: "/docs/core/functional/create-workspace-and-project",
-        label: "Create Workspace & Project",
-      },
-      {
-        description:
-          "Run tasks across board and list views with clear ownership and status.",
-        href: "/docs/core/functional/plan-and-execute-tasks",
-        label: "Plan & Execute Tasks",
-      },
-      {
-        description:
-          "Use backlog planning to organize upcoming work and sequencing.",
-        href: "/docs/core/functional/backlog-planning",
-        label: "Backlog Planning",
-      },
-      {
-        description:
-          "Define and evolve project workflows to match your delivery process.",
-        href: "/docs/core/functional/configure-workflows",
-        label: "Configure Workflows",
-      },
-    ],
-    label: "Product",
-    submenu: true,
-    type: "description",
-  },
-  {
-    items: [
-      { href: "/docs/core", label: "Quick Start" },
-      { href: "/docs/core/installation", label: "Installation" },
-      { href: "/docs/core/functional", label: "Functional Guide" },
-      { href: "/docs/api", label: "API Reference" },
-    ],
-    label: "Docs",
-    submenu: true,
-    type: "simple",
-  },
-  {
-    items: [
-      { href: "#why", label: "Why HyperFix" },
-      { href: "https://github.com/samalehzen/hyper", label: "Open Source" },
-      {
-        href: "https://coubeche.hypeer.cloud/public-project/vlu4ak2w8rs9rn1r4lirj2u1",
-        label: "Roadmap",
-      },
-      {
-        href: "https://github.com/samalehzen/hyper/blob/main/CONTRIBUTING.md",
-        label: "Contributing",
-      },
-    ],
-    label: "About",
-    submenu: true,
-    type: "simple",
-  },
-];
+const navigationLinks = ["Produit", "Docs", "À propos"];
 
 export function Navbar() {
   return (
@@ -150,33 +61,10 @@ export function Navbar() {
               <NavigationMenu className="max-w-none *:w-full" viewport={false}>
                 <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
                   {navigationLinks.map((link) => (
-                    <NavigationMenuItem className="w-full" key={link.label}>
-                      {link.submenu ? (
-                        <>
-                          <div className="px-2 py-1.5 font-medium text-muted-foreground text-xs">
-                            {link.label}
-                          </div>
-                          <ul>
-                            {link.items.map((item) => (
-                              <li key={item.label}>
-                                <NavigationMenuLink
-                                  className="rounded-none py-1.5"
-                                  href={item.href}
-                                >
-                                  {item.label}
-                                </NavigationMenuLink>
-                              </li>
-                            ))}
-                          </ul>
-                        </>
-                      ) : (
-                        <NavigationMenuLink
-                          className="rounded-none py-1.5"
-                          href={link.href}
-                        >
-                          {link.label}
-                        </NavigationMenuLink>
-                      )}
+                    <NavigationMenuItem className="w-full" key={link}>
+                      <div className="px-2 py-1.5 font-medium text-muted-foreground text-xs">
+                        {link}
+                      </div>
                     </NavigationMenuItem>
                   ))}
                 </NavigationMenuList>
@@ -188,7 +76,7 @@ export function Navbar() {
             <a
               className="flex h-8 items-center text-primary hover:text-primary"
               href="/"
-              aria-label="HyperFix home"
+              aria-label="Accueil HyperFix"
             >
               <Logo />
             </a>
@@ -200,53 +88,10 @@ export function Navbar() {
             >
               <NavigationMenuList className="gap-2">
                 {navigationLinks.map((link) => (
-                  <NavigationMenuItem key={link.label}>
-                    {link.submenu ? (
-                      <>
-                        <NavigationMenuTrigger className="rounded-none *:[svg]:-me-0.5 bg-transparent px-2 py-1.5 font-medium text-muted-foreground hover:text-primary *:[svg]:size-3.5">
-                          {link.label}
-                        </NavigationMenuTrigger>
-                        <NavigationMenuContent className="data-[motion=from-end]:slide-in-from-right-16! data-[motion=from-start]:slide-in-from-left-16! data-[motion=to-end]:slide-out-to-right-16! data-[motion=to-start]:slide-out-to-left-16! z-50 rounded-md border bg-popover p-1 text-popover-foreground shadow-md">
-                          <ul
-                            className={cn(
-                              link.type === "description"
-                                ? "min-w-64"
-                                : "min-w-48",
-                            )}
-                          >
-                            {link.items.map((item) => (
-                              <li key={item.label}>
-                                <NavigationMenuLink
-                                  className="rounded-none py-1.5"
-                                  href={item.href}
-                                >
-                                  {link.type === "description" &&
-                                  "description" in item ? (
-                                    <div className="space-y-1">
-                                      <div className="font-medium">
-                                        {item.label}
-                                      </div>
-                                      <p className="line-clamp-2 text-muted-foreground text-xs">
-                                        {item.description}
-                                      </p>
-                                    </div>
-                                  ) : (
-                                    <span>{item.label}</span>
-                                  )}
-                                </NavigationMenuLink>
-                              </li>
-                            ))}
-                          </ul>
-                        </NavigationMenuContent>
-                      </>
-                    ) : (
-                      <NavigationMenuLink
-                        className="rounded-none py-1.5 font-medium text-muted-foreground hover:text-primary"
-                        href={link.href}
-                      >
-                        {link.label}
-                      </NavigationMenuLink>
-                    )}
+                  <NavigationMenuItem key={link}>
+                    <span className="block rounded-none px-2 py-1.5 font-medium text-muted-foreground">
+                      {link}
+                    </span>
                   </NavigationMenuItem>
                 ))}
               </NavigationMenuList>
@@ -263,7 +108,7 @@ export function Navbar() {
               window.location.href = "https://github.com/sponsors/andrejsshell";
             }}
           >
-            Sponsor
+            Sponsoriser
           </Button>
           <Button
             className="text-sm"
@@ -274,7 +119,7 @@ export function Navbar() {
                 "https://coubeche.hypeer.cloud/auth/sign-in";
             }}
           >
-            Sign In
+            Connexion
           </Button>
           <Button
             className="text-sm"
@@ -283,7 +128,7 @@ export function Navbar() {
               window.location.href = "https://coubeche.hypeer.cloud";
             }}
           >
-            Get Started
+            Commencer
           </Button>
         </div>
       </div>

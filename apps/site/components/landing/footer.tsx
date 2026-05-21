@@ -6,9 +6,9 @@ export function Footer() {
       <div className="mx-auto w-full max-w-6xl space-y-10">
         <div className="grid gap-10 md:grid-cols-5">
           <div className="space-y-4 md:col-span-2">
-            <a href="/" aria-label="HyperFix home" className="inline-flex">
+            <span className="inline-flex">
               <Logo />
-            </a>
+            </span>
             <p className="max-w-sm text-balance text-muted-foreground text-sm">
               Tout ce dont vous avez besoin. Rien de superflu.
             </p>
@@ -16,71 +16,25 @@ export function Footer() {
 
           <div className="col-span-3 grid gap-6 sm:grid-cols-3">
             <div className="space-y-3 text-sm">
-              <p className="font-medium">Product</p>
-              <a
-                className="block text-muted-foreground transition-colors hover:text-foreground"
-                href="https://coubeche.hypeer.cloud"
-              >
-                Open Cloud
-              </a>
-              <a
-                className="block text-muted-foreground transition-colors hover:text-foreground"
-                href="/docs/core"
-              >
-                Getting Started
-              </a>
-              <a
-                className="block text-muted-foreground transition-colors hover:text-foreground"
-                href="#features"
-              >
-                Features
-              </a>
+              <p className="font-medium">Produit</p>
+              <span className="block text-muted-foreground">Cloud</span>
+              <span className="block text-muted-foreground">Démarrage</span>
+              <span className="block text-muted-foreground">
+                Fonctionnalités
+              </span>
             </div>
 
             <div className="space-y-3 text-sm">
-              <p className="font-medium">Resources</p>
-              <a
-                className="block text-muted-foreground transition-colors hover:text-foreground"
-                href="https://github.com/samalehzen/hyper"
-                target="_blank"
-                rel="noreferrer"
-              >
-                GitHub
-              </a>
-              <a
-                className="block text-muted-foreground transition-colors hover:text-foreground"
-                href="https://github.com/samalehzen/hyper/blob/main/LICENSE"
-                target="_blank"
-                rel="noreferrer"
-              >
-                License
-              </a>
-              <a
-                className="block text-muted-foreground transition-colors hover:text-foreground"
-                href="https://github.com/samalehzen/hyper/blob/main/CONTRIBUTING.md"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Contributing
-              </a>
+              <p className="font-medium">Ressources</p>
+              <span className="block text-muted-foreground">GitHub</span>
+              <span className="block text-muted-foreground">Licence</span>
+              <span className="block text-muted-foreground">Contribution</span>
             </div>
 
             <div className="space-y-3 text-sm">
-              <p className="font-medium">Community</p>
-              <a
-                className="block text-muted-foreground transition-colors hover:text-foreground"
-                href="https://discord.com/invite/rU4tSyhXXU"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Discord
-              </a>
-              <a
-                className="block text-muted-foreground transition-colors hover:text-foreground"
-                href="/docs"
-              >
-                Documentation
-              </a>
+              <p className="font-medium">Communauté</p>
+              <span className="block text-muted-foreground">Discord</span>
+              <span className="block text-muted-foreground">Documentation</span>
             </div>
           </div>
         </div>

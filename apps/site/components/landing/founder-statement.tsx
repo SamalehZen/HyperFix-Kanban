@@ -6,45 +6,49 @@ export function FounderStatement() {
       <div className="mx-auto w-full max-w-6xl">
         <FadeIn>
           <h2 className="text-3xl font-semibold md:text-4xl">
-            Why HyperFix exists
+            Pourquoi HyperFix existe
           </h2>
         </FadeIn>
         <FadeIn delay={80}>
           <div className="mt-6 space-y-6 text-lg leading-relaxed text-muted-foreground">
             <p>
-              I&apos;m{" "}
+              Je suis{" "}
               <strong className="font-medium text-foreground">Andrej</strong>,
-              and I created HyperFix because I was tired of project management
-              tools that got in the way more than they helped. After years of
-              using bloated, overcomplicated platforms that
+              et j&apos;ai créé HyperFix parce que j&apos;en avais assez des
+              outils de gestion de projet qui gênaient plus qu&apos;ils
+              n&apos;aidaient. Après des années à utiliser des plateformes
+              lourdes et trop compliquées qui
               <strong className="font-medium text-foreground">
                 {" "}
-                distracted from actual work
+                détournaient l&apos;attention du vrai travail
               </strong>
-              , I knew there had to be a better way.
+              , je savais qu&apos;il devait y avoir une meilleure façon de
+              faire.
             </p>
             <p>
-              The problem wasn&apos;t that these tools lacked features - it was
-              that they had
-              <strong className="font-medium text-foreground"> too many</strong>
-              . Every notification, every unnecessary button, every complex
-              workflow was pulling my team away from what mattered:{" "}
+              Le problème n&apos;était pas que ces outils manquaient de
+              fonctionnalités : c&apos;est qu&apos;ils en avaient
+              <strong className="font-medium text-foreground"> trop</strong>.
+              Chaque notification, chaque bouton inutile, chaque flux complexe
+              éloignait mon équipe de ce qui comptait vraiment :{" "}
               <strong className="font-medium text-foreground">
-                building great products
+                construire d&apos;excellents produits
               </strong>
               .
             </p>
             <p>
-              I believe the best tools are{" "}
-              <strong className="font-medium text-foreground">invisible</strong>
-              . They should amplify your team&apos;s natural workflow, not force
-              you to adapt to theirs. HyperFix is built on the principle that
+              Je pense que les meilleurs outils sont{" "}
+              <strong className="font-medium text-foreground">
+                invisibles
+              </strong>
+              . Ils doivent amplifier le flux naturel de votre équipe, pas vous
+              forcer à vous adapter au leur. HyperFix repose sur ce principe :
               <strong className="font-medium text-foreground">
                 {" "}
-                less is more
+                moins, c&apos;est mieux
               </strong>{" "}
-              - every feature exists because it solves a real problem, not
-              because it looks impressive in a demo.
+              — chaque fonctionnalité existe parce qu&apos;elle résout un vrai
+              problème, pas parce qu&apos;elle impressionne en démo.
             </p>
           </div>
         </FadeIn>

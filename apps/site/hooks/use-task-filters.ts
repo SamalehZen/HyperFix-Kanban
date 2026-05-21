@@ -106,7 +106,7 @@ export function useTaskFilters(
         const taskDate = task.dueDate ? new Date(task.dueDate) : null;
 
         const matchesAnyDueDate = filters.dueDate.some((dueDateFilter) => {
-          if (dueDateFilter === "No due date") {
+          if (dueDateFilter === "Sans échéance") {
             return !task.dueDate;
           }
 
@@ -115,7 +115,7 @@ export function useTaskFilters(
           }
 
           switch (dueDateFilter) {
-            case "Due this week": {
+            case "Cette semaine": {
               const weekStart = startOfWeek(today);
               const weekEnd = endOfWeek(today);
               return isWithinInterval(taskDate, {
@@ -123,7 +123,7 @@ export function useTaskFilters(
                 end: weekEnd,
               });
             }
-            case "Due next week": {
+            case "La semaine prochaine": {
               const nextWeekStart = startOfWeek(addWeeks(today, 1));
               const nextWeekEnd = endOfWeek(addWeeks(today, 1));
               return isWithinInterval(taskDate, {

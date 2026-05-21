@@ -51,6 +51,19 @@ type BoardToolbarProps = {
   setViewMode: (mode: "board" | "list") => void;
 };
 
+const priorityLabels: Record<string, string> = {
+  urgent: "Urgente",
+  high: "Élevée",
+  medium: "Moyenne",
+  low: "Faible",
+};
+
+const dueDateFilters = [
+  "Cette semaine",
+  "La semaine prochaine",
+  "Sans échéance",
+];
+
 function CheckSlot({ checked }: { checked: boolean }) {
   return (
     <span
@@ -151,11 +164,11 @@ export default function BoardToolbar({
   };
 
   const getPriorityDisplayName = (priority: string) =>
-    priority.charAt(0).toUpperCase() + priority.slice(1);
+    priorityLabels[priority] ?? priority;
 
   const getAssigneeDisplayName = (userId: string) => {
     const member = users?.members?.find((m) => m.userId === userId);
-    return member?.user?.name || "Unknown";
+    return member?.user?.name || "Inconnu";
   };
   const getAssigneeAvatar = (userId: string) => {
     const member = users?.members?.find((m) => m.userId === userId);
@@ -257,19 +270,19 @@ export default function BoardToolbar({
                 }
               >
                 <Filter className="h-3 w-3" />
-                Filter
+                Filtrer
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="start">
                 <DropdownMenuGroup>
                   <DropdownMenuLabel className="text-[11px] uppercase tracking-wide">
-                    Filter By
+                    Filtrer par
                   </DropdownMenuLabel>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
 
                 <DropdownMenuSub>
                   <DropdownMenuSubTrigger className="h-8 rounded-md text-sm">
-                    Status
+                    Statut
                   </DropdownMenuSubTrigger>
                   <DropdownMenuSubContent className="w-72">
                     <div className="grid grid-cols-1 gap-1 p-1">
@@ -283,7 +296,7 @@ export default function BoardToolbar({
                         type="button"
                       >
                         <CheckSlot checked={selectedStatusIds.length === 0} />
-                        All statuses
+                        Tous les statuts
                       </button>
                       {project?.columns?.map(
                         (column: {
@@ -317,7 +330,7 @@ export default function BoardToolbar({
 
                 <DropdownMenuSub>
                   <DropdownMenuSubTrigger className="h-8 rounded-md text-sm">
-                    Priority
+                    Priorité
                   </DropdownMenuSubTrigger>
                   <DropdownMenuSubContent className="w-72">
                     <div className="grid grid-cols-1 gap-1 p-1">
@@ -331,7 +344,7 @@ export default function BoardToolbar({
                         type="button"
                       >
                         <CheckSlot checked={selectedPriorityIds.length === 0} />
-                        All priorities
+                        Toutes les priorités
                       </button>
                       {["urgent", "high", "medium", "low"].map((priority) => (
                         <button
@@ -350,8 +363,8 @@ export default function BoardToolbar({
                           <span className="inline-flex h-4 w-4 items-center justify-center [&>svg]:h-4 [&>svg]:w-4">
                             {getPriorityIcon(priority)}
                           </span>
-                          <span className="truncate capitalize">
-                            {priority}
+                          <span className="truncate">
+                            {getPriorityDisplayName(priority)}
                           </span>
                         </button>
                       ))}
@@ -361,7 +374,7 @@ export default function BoardToolbar({
 
                 <DropdownMenuSub>
                   <DropdownMenuSubTrigger className="h-8 rounded-md text-sm">
-                    Assignee
+                    Responsable
                   </DropdownMenuSubTrigger>
                   <DropdownMenuSubContent className="w-64">
                     <div className="grid grid-cols-1 gap-1 p-1">
@@ -375,7 +388,7 @@ export default function BoardToolbar({
                         type="button"
                       >
                         <CheckSlot checked={selectedAssigneeIds.length === 0} />
-                        All assignees
+                        Tous les responsables
                       </button>
                       {users?.members?.map((member) => (
                         <button
@@ -413,7 +426,7 @@ export default function BoardToolbar({
 
                 <DropdownMenuSub>
                   <DropdownMenuSubTrigger className="h-8 rounded-md text-sm">
-                    Due date
+                    Échéance
                   </DropdownMenuSubTrigger>
                   <DropdownMenuSubContent className="w-56">
                     <div className="grid grid-cols-1 gap-1 p-1">
@@ -429,34 +442,32 @@ export default function BoardToolbar({
                         <CheckSlot
                           checked={selectedDueDateFilters.length === 0}
                         />
-                        All due dates
+                        Toutes les échéances
                       </button>
-                      {["Due this week", "Due next week", "No due date"].map(
-                        (dueDate) => (
-                          <button
-                            key={dueDate}
-                            className={`inline-flex h-7 items-center gap-1.5 rounded-md px-2 text-left text-xs ${
-                              selectedDueDateFilters.includes(dueDate)
-                                ? "bg-accent text-accent-foreground"
-                                : "text-foreground/90 hover:bg-accent/60 hover:text-foreground"
-                            }`}
-                            onClick={() => toggleDueDateFilter(dueDate)}
-                            type="button"
-                          >
-                            <CheckSlot
-                              checked={selectedDueDateFilters.includes(dueDate)}
-                            />
-                            {dueDate}
-                          </button>
-                        ),
-                      )}
+                      {dueDateFilters.map((dueDate) => (
+                        <button
+                          key={dueDate}
+                          className={`inline-flex h-7 items-center gap-1.5 rounded-md px-2 text-left text-xs ${
+                            selectedDueDateFilters.includes(dueDate)
+                              ? "bg-accent text-accent-foreground"
+                              : "text-foreground/90 hover:bg-accent/60 hover:text-foreground"
+                          }`}
+                          onClick={() => toggleDueDateFilter(dueDate)}
+                          type="button"
+                        >
+                          <CheckSlot
+                            checked={selectedDueDateFilters.includes(dueDate)}
+                          />
+                          {dueDate}
+                        </button>
+                      ))}
                     </div>
                   </DropdownMenuSubContent>
                 </DropdownMenuSub>
 
                 <DropdownMenuSub>
                   <DropdownMenuSubTrigger className="h-8 rounded-md text-sm">
-                    Labels
+                    Libellés
                   </DropdownMenuSubTrigger>
                   <DropdownMenuSubContent className="w-64">
                     <DropdownMenuItem
@@ -466,7 +477,7 @@ export default function BoardToolbar({
                       <CheckSlot
                         checked={!filters.labels || filters.labels.length === 0}
                       />
-                      All labels
+                      Tous les libellés
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     {uniqueLabels.length > 0 ? (
@@ -495,7 +506,7 @@ export default function BoardToolbar({
                         disabled
                         className="h-8 rounded-md text-sm text-muted-foreground"
                       >
-                        No labels available
+                        Aucun libellé disponible
                       </DropdownMenuItem>
                     )}
                   </DropdownMenuSubContent>
@@ -508,7 +519,7 @@ export default function BoardToolbar({
                       onClick={clearFilters}
                       className="h-8 rounded-md text-sm text-muted-foreground"
                     >
-                      Clear all filters
+                      Effacer tous les filtres
                     </DropdownMenuItem>
                   </>
                 )}
@@ -517,8 +528,8 @@ export default function BoardToolbar({
 
             {selectedStatusIds.length > 0 && (
               <ActiveFilterChip
-                subject="Status"
-                operator="is any of"
+                subject="Statut"
+                operator="est l’un de"
                 value={
                   <span className="inline-flex items-center gap-1.5">
                     <StackedIcons
@@ -531,7 +542,7 @@ export default function BoardToolbar({
                     <span>
                       {selectedStatusIds.length === 1
                         ? getStatusDisplayName(selectedStatusIds[0])
-                        : `${selectedStatusIds.length} selected`}
+                        : `${selectedStatusIds.length} sélectionnés`}
                     </span>
                   </span>
                 }
@@ -541,8 +552,8 @@ export default function BoardToolbar({
 
             {selectedPriorityIds.length > 0 && (
               <ActiveFilterChip
-                subject="Priority"
-                operator="is any of"
+                subject="Priorité"
+                operator="est l’une de"
                 value={
                   <span className="inline-flex items-center gap-1.5">
                     <StackedIcons
@@ -554,7 +565,7 @@ export default function BoardToolbar({
                     <span>
                       {selectedPriorityIds.length === 1
                         ? getPriorityDisplayName(selectedPriorityIds[0])
-                        : `${selectedPriorityIds.length} selected`}
+                        : `${selectedPriorityIds.length} sélectionnées`}
                     </span>
                   </span>
                 }
@@ -564,8 +575,8 @@ export default function BoardToolbar({
 
             {selectedAssigneeIds.length > 0 && (
               <ActiveFilterChip
-                subject="Assignee"
-                operator="is any of"
+                subject="Responsable"
+                operator="est l’un de"
                 value={
                   <span className="inline-flex items-center gap-1.5">
                     <StackedIcons
@@ -577,7 +588,7 @@ export default function BoardToolbar({
                     <span>
                       {selectedAssigneeIds.length === 1
                         ? getAssigneeDisplayName(selectedAssigneeIds[0])
-                        : `${selectedAssigneeIds.length} selected`}
+                        : `${selectedAssigneeIds.length} sélectionnés`}
                     </span>
                   </span>
                 }
@@ -587,12 +598,12 @@ export default function BoardToolbar({
 
             {selectedDueDateFilters.length > 0 && (
               <ActiveFilterChip
-                subject="Due date"
-                operator="is any of"
+                subject="Échéance"
+                operator="est l’une de"
                 value={
                   selectedDueDateFilters.length === 1
                     ? selectedDueDateFilters[0]
-                    : `${selectedDueDateFilters.length} selected`
+                    : `${selectedDueDateFilters.length} sélectionnées`
                 }
                 onClear={() => updateFilter("dueDate", null)}
               />
@@ -600,9 +611,9 @@ export default function BoardToolbar({
 
             {filters.labels && filters.labels.length > 0 && (
               <ActiveFilterChip
-                subject="Labels"
-                operator="include any of"
-                value={`${filters.labels.length} selected`}
+                subject="Libellés"
+                operator="incluent l’un de"
+                value={`${filters.labels.length} sélectionnés`}
                 onClear={clearLabelFilters}
               />
             )}
@@ -619,7 +630,7 @@ export default function BoardToolbar({
               onClick={() => setViewMode("board")}
             >
               <PanelsTopLeft className="h-3 w-3" />
-              Board
+              Tableau
             </button>
             <button
               type="button"
@@ -631,7 +642,7 @@ export default function BoardToolbar({
               onClick={() => setViewMode("list")}
             >
               <Rows3 className="h-3 w-3" />
-              List
+              Liste
             </button>
           </div>
         </div>

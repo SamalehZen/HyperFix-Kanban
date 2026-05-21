@@ -1,6 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 import {
   Archive,
   Calendar,
@@ -160,7 +161,9 @@ export function PrivateListView({
                               <Calendar className="w-3 h-3" />
                             )}
                             <span>
-                              {format(new Date(task.dueDate), "MMM d")}
+                              {format(new Date(task.dueDate), "d MMM", {
+                                locale: fr,
+                              })}
                             </span>
                           </div>
                         )}
