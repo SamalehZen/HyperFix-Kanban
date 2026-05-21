@@ -39,7 +39,7 @@ export function ThemeToggle() {
 
   return (
     <Button
-      aria-label="Toggle theme"
+      aria-label="Changer de thème"
       className="size-8"
       onClick={toggleTheme}
       size="icon"

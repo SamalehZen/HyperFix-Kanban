@@ -9,18 +9,18 @@ export function Hero() {
   return (
     <section className="relative overflow-hidden px-6 pt-14 pb-16 md:pt-20 md:pb-20 lg:pt-24">
       <div className="mx-auto w-full max-w-6xl">
-        {/* ── Heading + description + buttons ── */}
         <div className="mb-10 max-w-2xl">
           <FadeIn delay={0}>
             <h1 className="text-balance text-4xl font-medium leading-[1.06] md:text-5xl lg:text-6xl">
-              All you <span className="text-primary">need</span>. Nothing you
-              don&apos;t.
+              Tout ce qu&apos;il vous <span className="text-primary">faut</span>
+              . Rien de superflu.
             </h1>
           </FadeIn>
           <FadeIn delay={80}>
             <p className="mt-5 text-balance text-lg text-muted-foreground leading-relaxed md:text-xl">
-              HyperFix gives you clean planning, focused execution, and full
-              ownership of your workflow from backlog to release.
+              HyperFix vous donne une planification claire, une exécution ciblée
+              et la pleine maîtrise de votre flux de travail, du backlog à la
+              livraison.
             </p>
           </FadeIn>
 
@@ -43,7 +43,7 @@ export function Hero() {
                   window.location.href = "/docs/core";
                 }}
               >
-                Get Started
+                Commencer
               </Button>
               <Button
                 variant="outline"
@@ -60,7 +60,6 @@ export function Hero() {
           </FadeIn>
         </div>
 
-        {/* ── App preview — interactive mock of the real HyperFix UI ── */}
         <FadeIn delay={240} distance={32}>
           <AppPreview />
         </FadeIn>

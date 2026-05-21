@@ -12,22 +12,23 @@ export function Features() {
             <div className="grid grid-cols-1 gap-2 lg:grid-cols-12">
               <article className="rounded-xl border border-border/70 bg-card p-6 lg:col-span-5 lg:p-8">
                 <p className="font-medium text-muted-foreground text-sm">
-                  Core workflows
+                  Flux essentiels
                 </p>
                 <h2 className="mt-4 text-3xl font-semibold leading-tight md:text-4xl">
-                  Minimal surface area. Maximum execution clarity.
+                  Une interface minimale. Une exécution parfaitement claire.
                 </h2>
                 <p className="mt-4 max-w-xl text-muted-foreground text-base leading-relaxed">
-                  HyperFix keeps planning operational: less dashboard theater,
-                  more visible ownership and throughput.
+                  HyperFix garde la planification opérationnelle : moins de
+                  tableaux de bord décoratifs, plus de responsabilités visibles
+                  et de débit réel.
                 </p>
                 <div className="mt-6 rounded-xl border border-border/60 bg-muted/30 p-4">
                   <h3 className="text-sm font-medium">
-                    Board and list, same source of truth
+                    Tableau et liste, une seule source de vérité
                   </h3>
                   <p className="mt-2 text-muted-foreground text-sm leading-relaxed">
-                    Plan in list view, execute in board view, and keep statuses,
-                    priorities, and labels in sync.
+                    Planifiez en vue liste, exécutez en vue tableau, et gardez
+                    les statuts, priorités et libellés synchronisés.
                   </p>
                 </div>
               </article>
@@ -35,47 +36,49 @@ export function Features() {
               <div className="grid grid-cols-1 gap-2 lg:col-span-7 sm:grid-cols-2">
                 <article className="rounded-xl border border-border/70 bg-card p-6">
                   <h3 className="text-sm font-medium">
-                    Planning that stays focused
+                    Une planification qui reste concentrée
                   </h3>
                   <p className="mt-2 text-muted-foreground text-sm leading-relaxed">
-                    Assign owners, due dates, and priorities without introducing
-                    heavy process.
+                    Attribuez des responsables, des échéances et des priorités
+                    sans ajouter de processus lourd.
                   </p>
                 </article>
 
                 <article className="rounded-xl border border-border/70 bg-card p-6">
-                  <h3 className="text-sm font-medium">Labels and priorities</h3>
+                  <h3 className="text-sm font-medium">Libellés et priorités</h3>
                   <p className="mt-2 text-muted-foreground text-sm leading-relaxed">
-                    Organize initiatives with labels and prioritize work clearly
-                    across backlog and active scope.
+                    Organisez les initiatives avec des libellés et priorisez le
+                    travail clairement entre backlog et périmètre actif.
                   </p>
                 </article>
 
                 <article className="rounded-xl border border-border/70 bg-card p-6 sm:col-span-2">
                   <h3 className="text-sm font-medium">
-                    Native GitHub integration
+                    Intégration GitHub native
                   </h3>
                   <p className="mt-2 text-muted-foreground text-sm leading-relaxed">
-                    Sync issues and keep product planning aligned with
-                    development execution.
-                  </p>
-                </article>
-
-                <article className="rounded-xl border border-border/70 bg-card p-6">
-                  <h3 className="text-sm font-medium">Privacy first</h3>
-                  <p className="mt-2 text-muted-foreground text-sm leading-relaxed">
-                    Minimal analytics and transparent architecture for teams
-                    that care about control.
+                    Synchronisez les issues et gardez la planification produit
+                    alignée avec l&apos;exécution du développement.
                   </p>
                 </article>
 
                 <article className="rounded-xl border border-border/70 bg-card p-6">
                   <h3 className="text-sm font-medium">
-                    Self-hosted by default
+                    Confidentialité d&apos;abord
                   </h3>
                   <p className="mt-2 text-muted-foreground text-sm leading-relaxed">
-                    Deploy with Docker and keep full ownership of your
-                    infrastructure and data.
+                    Des analyses minimales et une architecture transparente pour
+                    les équipes qui veulent garder le contrôle.
+                  </p>
+                </article>
+
+                <article className="rounded-xl border border-border/70 bg-card p-6">
+                  <h3 className="text-sm font-medium">
+                    Auto-hébergé par défaut
+                  </h3>
+                  <p className="mt-2 text-muted-foreground text-sm leading-relaxed">
+                    Déployez avec Docker et gardez la pleine maîtrise de votre
+                    infrastructure et de vos données.
                   </p>
                 </article>
               </div>

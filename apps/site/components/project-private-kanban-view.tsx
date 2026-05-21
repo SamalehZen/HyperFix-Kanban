@@ -72,7 +72,7 @@ export function PrivateKanbanView({
                   className="flex w-full items-center gap-1.5 rounded-md px-2 py-1 text-xs text-muted-foreground transition-colors hover:bg-accent/60 hover:text-foreground"
                 >
                   <Plus className="h-3.5 w-3.5" />
-                  Add task
+                  Ajouter une tâche
                 </button>
               </div>
             </div>

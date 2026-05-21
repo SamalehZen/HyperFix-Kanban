@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 import { Calendar, CalendarClock, CalendarX } from "lucide-react";
 import { useRef } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -68,7 +69,7 @@ export function PublicTaskCard({
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       onClick={handleClick}
-      aria-label={`View details for task ${task.title}`}
+      aria-label={`Voir les détails de la tâche ${task.title}`}
     >
       <div className="text-[10px] font-mono text-muted-foreground mb-2">
         {projectSlug}-{task.number}
@@ -133,7 +134,9 @@ export function PublicTaskCard({
               getDueDateStatus(task.dueDate) === "no-due-date") && (
               <Calendar className="w-3 h-3" />
             )}
-            <span>{format(new Date(task.dueDate), "MMM d")}</span>
+            <span>
+              {format(new Date(task.dueDate), "d MMM", { locale: fr })}
+            </span>
           </div>
         )}
 

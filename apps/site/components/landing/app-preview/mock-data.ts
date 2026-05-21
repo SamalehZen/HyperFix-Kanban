@@ -14,7 +14,7 @@ export type TaskWithExtras = Task & {
 // ------------------------------------------------------------------
 export const MOCK_WORKSPACE = {
   id: "ws-preview",
-  name: "Dunder Mifflin",
+  name: "Atelier HyperFix",
   slug: "dunder",
 };
 
@@ -23,10 +23,10 @@ export const MOCK_WORKSPACE = {
 // ------------------------------------------------------------------
 export const MOCK_WORKSPACE_LABELS = [
   { id: "lbl-1", name: "urgent", color: "#ef4444" },
-  { id: "lbl-2", name: "sales", color: "#6366f1" },
-  { id: "lbl-3", name: "hr", color: "#10b981" },
-  { id: "lbl-4", name: "bears", color: "#f59e0b" },
-  { id: "lbl-5", name: "cinema", color: "#8b5cf6" },
+  { id: "lbl-2", name: "ventes", color: "#6366f1" },
+  { id: "lbl-3", name: "équipe", color: "#10b981" },
+  { id: "lbl-4", name: "finance", color: "#f59e0b" },
+  { id: "lbl-5", name: "produit", color: "#8b5cf6" },
 ];
 
 // ------------------------------------------------------------------
@@ -54,7 +54,7 @@ const d = (offset: number): string => {
 };
 
 // ------------------------------------------------------------------
-// Project 1: Scranton Branch
+// Project 1: Lancement web
 // ------------------------------------------------------------------
 const SCR_ID = "p-1";
 const WS_ID = "ws-preview";
@@ -63,9 +63,9 @@ const scrTasks: TaskWithExtras[] = [
   {
     id: "t-101",
     number: 1,
-    title: "Plan Dundie Awards ceremony",
+    title: "Préparer la réunion de lancement",
     description:
-      "Book Chili's, prepare trophies, write acceptance speech (just in case), and arrange the PowerPoint slideshow.",
+      "Réserver la salle, préparer le support de présentation et valider l'ordre du jour avec l'équipe.",
     priority: "high",
     status: "in-progress",
     position: 1,
@@ -77,14 +77,14 @@ const scrTasks: TaskWithExtras[] = [
     updatedAt: UPDATED_AT,
     assigneeName: "Michael Scott",
     assigneeImage: null,
-    labels: [{ id: "lbl-3", name: "hr", color: "#10b981" }],
+    labels: [{ id: "lbl-3", name: "équipe", color: "#10b981" }],
   },
   {
     id: "t-102",
     number: 2,
-    title: "Negotiate new paper contract with Prince Family Paper",
+    title: "Finaliser le contrat fournisseur",
     description:
-      "Undercut their pricing while maintaining a friendly relationship. Do not mention the secret intel.",
+      "Comparer les offres, ajuster le budget et confirmer les conditions avant la fin de semaine.",
     priority: "medium",
     status: "in-progress",
     position: 2,
@@ -96,14 +96,14 @@ const scrTasks: TaskWithExtras[] = [
     updatedAt: UPDATED_AT,
     assigneeName: "Jim Halpert",
     assigneeImage: null,
-    labels: [{ id: "lbl-2", name: "sales", color: "#6366f1" }],
+    labels: [{ id: "lbl-2", name: "ventes", color: "#6366f1" }],
   },
   {
     id: "t-103",
     number: 3,
-    title: "Organize Pretzel Day logistics",
+    title: "Organiser la logistique de l'événement client",
     description:
-      "Coordinate with the pretzel vendor, manage the queue system, and prevent stampedes near the reception desk.",
+      "Coordonner les prestataires, gérer les invitations et vérifier le planning d'accueil.",
     priority: "urgent",
     status: "to-do",
     position: 1,
@@ -120,9 +120,9 @@ const scrTasks: TaskWithExtras[] = [
   {
     id: "t-104",
     number: 4,
-    title: "Update fire safety training video",
+    title: "Mettre à jour la documentation interne",
     description:
-      "The current video references a fax machine nobody uses anymore. Replace fire extinguisher scene. Do NOT involve Kevin.",
+      "Retirer les anciennes captures, ajouter les nouveaux flux et publier la version validée.",
     priority: "low",
     status: "to-do",
     position: 2,
@@ -139,9 +139,9 @@ const scrTasks: TaskWithExtras[] = [
   {
     id: "t-105",
     number: 5,
-    title: "Review Dwight's beet farm expense report",
+    title: "Revoir le rapport de dépenses trimestriel",
     description:
-      "He's submitted $400 in 'office-related beet research'. Finance needs a sign-off before the quarter closes.",
+      "La finance attend une validation avant la clôture du trimestre.",
     priority: "high",
     status: "in-review",
     position: 1,
@@ -153,14 +153,14 @@ const scrTasks: TaskWithExtras[] = [
     updatedAt: UPDATED_AT,
     assigneeName: "Jim Halpert",
     assigneeImage: null,
-    labels: [{ id: "lbl-4", name: "bears", color: "#f59e0b" }],
+    labels: [{ id: "lbl-4", name: "finance", color: "#f59e0b" }],
   },
   {
     id: "t-106",
     number: 6,
-    title: "Complete CPR recertification",
+    title: "Terminer la formation sécurité",
     description:
-      "Annual requirement. Staple has agreed to leave the mannequin face intact this time.",
+      "Session annuelle obligatoire pour toute l'équipe avant le prochain audit.",
     priority: "medium",
     status: "done",
     position: 1,
@@ -172,14 +172,14 @@ const scrTasks: TaskWithExtras[] = [
     updatedAt: UPDATED_AT,
     assigneeName: "Pam Beesly",
     assigneeImage: null,
-    labels: [{ id: "lbl-3", name: "hr", color: "#10b981" }],
+    labels: [{ id: "lbl-3", name: "équipe", color: "#10b981" }],
   },
   {
     id: "t-107",
     number: 7,
-    title: "Migrate contact database off the index cards",
+    title: "Migrer la base de contacts",
     description:
-      "Dwight insists the card system is more secure. It isn't. Move everything to Salesforce.",
+      "Centraliser les contacts, nettoyer les doublons et préparer l'import final.",
     priority: "medium",
     status: "done",
     position: 2,
@@ -191,15 +191,15 @@ const scrTasks: TaskWithExtras[] = [
     updatedAt: UPDATED_AT,
     assigneeName: "Dwight Schrute",
     assigneeImage: null,
-    labels: [{ id: "lbl-2", name: "sales", color: "#6366f1" }],
+    labels: [{ id: "lbl-2", name: "ventes", color: "#6366f1" }],
   },
 ];
 
 export const WEB_PROJECT: ProjectWithTasks = {
   id: SCR_ID,
-  name: "Scranton Branch",
+  name: "Lancement web",
   slug: "SCR",
-  description: "Day-to-day operations of the Scranton office.",
+  description: "Suivi quotidien du lancement web.",
   icon: null,
   workspaceId: WS_ID,
   isPublic: false,
@@ -208,7 +208,7 @@ export const WEB_PROJECT: ProjectWithTasks = {
   columns: [
     {
       id: "to-do",
-      name: "To Do",
+      name: "À faire",
       order: 0,
       isFinal: false,
       projectId: SCR_ID,
@@ -216,7 +216,7 @@ export const WEB_PROJECT: ProjectWithTasks = {
     },
     {
       id: "in-progress",
-      name: "In Progress",
+      name: "En cours",
       order: 1,
       isFinal: false,
       projectId: SCR_ID,
@@ -224,7 +224,7 @@ export const WEB_PROJECT: ProjectWithTasks = {
     },
     {
       id: "in-review",
-      name: "In Review",
+      name: "En revue",
       order: 2,
       isFinal: false,
       projectId: SCR_ID,
@@ -232,7 +232,7 @@ export const WEB_PROJECT: ProjectWithTasks = {
     },
     {
       id: "done",
-      name: "Done",
+      name: "Terminé",
       order: 3,
       isFinal: true,
       projectId: SCR_ID,
@@ -242,7 +242,7 @@ export const WEB_PROJECT: ProjectWithTasks = {
 };
 
 // ------------------------------------------------------------------
-// Project 2: Threat Level Midnight
+// Project 2: Refonte mobile
 // ------------------------------------------------------------------
 const TLM_ID = "p-2";
 
@@ -250,9 +250,9 @@ const tlmTasks: TaskWithExtras[] = [
   {
     id: "t-201",
     number: 1,
-    title: "Edit the casino heist sequence",
+    title: "Finaliser le prototype mobile",
     description:
-      "Michael Scarn's dialogue in act 2 needs tightening. The line 'Threat Level Midnight' should land harder.",
+      "Affiner les écrans clés et vérifier les interactions principales avant la revue produit.",
     priority: "high",
     status: "in-progress",
     position: 1,
@@ -264,14 +264,14 @@ const tlmTasks: TaskWithExtras[] = [
     updatedAt: UPDATED_AT,
     assigneeName: "Michael Scott",
     assigneeImage: null,
-    labels: [{ id: "lbl-5", name: "cinema", color: "#8b5cf6" }],
+    labels: [{ id: "lbl-5", name: "produit", color: "#8b5cf6" }],
   },
   {
     id: "t-202",
     number: 2,
-    title: "Rewrite the love interest subplot",
+    title: "Réécrire le parcours d'onboarding",
     description:
-      "Catherine Zeta-Jones was unavailable. Recasting with Carol from the realtor office. Update all related scenes.",
+      "Simplifier les étapes, clarifier les libellés et réduire les champs obligatoires.",
     priority: "high",
     status: "to-do",
     position: 1,
@@ -283,14 +283,14 @@ const tlmTasks: TaskWithExtras[] = [
     updatedAt: UPDATED_AT,
     assigneeName: "Pam Beesly",
     assigneeImage: null,
-    labels: [{ id: "lbl-5", name: "cinema", color: "#8b5cf6" }],
+    labels: [{ id: "lbl-5", name: "produit", color: "#8b5cf6" }],
   },
   {
     id: "t-203",
     number: 3,
-    title: "Review Golden Face's villain monologue",
+    title: "Relire les messages d'erreur",
     description:
-      "Dwight's delivery is technically correct but lacks menace. Consider additional coaching.",
+      "Rendre les messages plus utiles et cohérents avec le ton de l'application.",
     priority: "urgent",
     status: "in-review",
     position: 1,
@@ -303,16 +303,16 @@ const tlmTasks: TaskWithExtras[] = [
     assigneeName: "Jim Halpert",
     assigneeImage: null,
     labels: [
-      { id: "lbl-4", name: "bears", color: "#f59e0b" },
-      { id: "lbl-5", name: "cinema", color: "#8b5cf6" },
+      { id: "lbl-4", name: "finance", color: "#f59e0b" },
+      { id: "lbl-5", name: "produit", color: "#8b5cf6" },
     ],
   },
   {
     id: "t-204",
     number: 4,
-    title: "Source ice hockey rink for final showdown",
+    title: "Planifier les tests de recette",
     description:
-      "The Scranton rink has agreed to a half-day rental. Confirm insurance waiver and bring spare zamboni driver.",
+      "Préparer les scénarios, affecter les testeurs et suivre les retours bloquants.",
     priority: "medium",
     status: "to-do",
     position: 2,
@@ -327,9 +327,9 @@ const tlmTasks: TaskWithExtras[] = [
   {
     id: "t-205",
     number: 5,
-    title: "Score the opening title sequence",
+    title: "Valider la séquence de publication",
     description:
-      "Kevin has offered to handle the music. Nobody else applied. Finalize the saxophone arrangement.",
+      "Confirmer la checklist de mise en production et le plan de retour arrière.",
     priority: "medium",
     status: "done",
     position: 1,
@@ -341,15 +341,15 @@ const tlmTasks: TaskWithExtras[] = [
     updatedAt: UPDATED_AT,
     assigneeName: "Jim Halpert",
     assigneeImage: null,
-    labels: [{ id: "lbl-5", name: "cinema", color: "#8b5cf6" }],
+    labels: [{ id: "lbl-5", name: "produit", color: "#8b5cf6" }],
   },
 ];
 
 export const MOB_PROJECT: ProjectWithTasks = {
   id: TLM_ID,
-  name: "Threat Level Midnight",
+  name: "Refonte mobile",
   slug: "TLM",
-  description: "Michael Scott's magnum opus. In production since 1996.",
+  description: "Refonte de l'expérience mobile.",
   icon: null,
   workspaceId: WS_ID,
   isPublic: false,
@@ -358,7 +358,7 @@ export const MOB_PROJECT: ProjectWithTasks = {
   columns: [
     {
       id: "to-do",
-      name: "To Do",
+      name: "À faire",
       order: 0,
       isFinal: false,
       projectId: TLM_ID,
@@ -366,7 +366,7 @@ export const MOB_PROJECT: ProjectWithTasks = {
     },
     {
       id: "in-progress",
-      name: "In Progress",
+      name: "En cours",
       order: 1,
       isFinal: false,
       projectId: TLM_ID,
@@ -374,7 +374,7 @@ export const MOB_PROJECT: ProjectWithTasks = {
     },
     {
       id: "in-review",
-      name: "In Review",
+      name: "En revue",
       order: 2,
       isFinal: false,
       projectId: TLM_ID,
@@ -382,7 +382,7 @@ export const MOB_PROJECT: ProjectWithTasks = {
     },
     {
       id: "done",
-      name: "Done",
+      name: "Terminé",
       order: 3,
       isFinal: true,
       projectId: TLM_ID,

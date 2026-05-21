@@ -16,15 +16,15 @@ export const metadata: Metadata = {
     template: "%s | HyperFix",
   },
   description:
-    "Tout ce dont vous avez besoin. Rien de superflu. Open source project management that works for you, not against you.",
+    "Tout ce dont vous avez besoin. Rien de superflu. Une gestion de projet open source qui travaille pour vous, pas contre vous.",
   keywords: [
     "hyperfix",
-    "project management",
+    "gestion de projet",
     "open source",
     "kanban",
-    "task management",
-    "self-hosted",
-    "team collaboration",
+    "gestion des tâches",
+    "auto-hébergé",
+    "collaboration d'équipe",
   ],
   applicationName: "HyperFix",
   alternates: {
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     siteName: "HyperFix",
     title: "HyperFix - Tout ce dont vous avez besoin. Rien de superflu.",
     description:
-      "Open source project management that works for you, not against you. Self-hosted, simple, and powerful.",
+      "Gestion de projet open source qui travaille pour vous, pas contre vous. Auto-hébergé, simple et puissant.",
     images: [
       {
         url: "/images/hero.png",
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "HyperFix - Tout ce dont vous avez besoin. Rien de superflu.",
     description:
-      "Open source project management that works for you, not against you. Self-hosted, simple, and powerful.",
+      "Gestion de projet open source qui travaille pour vous, pas contre vous. Auto-hébergé, simple et puissant.",
     images: ["/images/hero.png"],
   },
   robots: {
@@ -81,7 +81,7 @@ const jsonLd = [
     "@type": "WebSite",
     name: "HyperFix",
     url: "https://hyperfix.hypeer.cloud",
-    inLanguage: "en",
+    inLanguage: "fr",
   },
   {
     "@context": "https://schema.org",
@@ -90,7 +90,7 @@ const jsonLd = [
     applicationCategory: "BusinessApplication",
     operatingSystem: "Web, Linux, macOS, Windows",
     description:
-      "Open source project management that works for you, not against you. Self-hosted, simple, and powerful.",
+      "Gestion de projet open source qui travaille pour vous, pas contre vous. Auto-hébergé, simple et puissant.",
     url: "https://hyperfix.hypeer.cloud",
     image: "https://hyperfix.hypeer.cloud/images/hero.png",
     license: "https://github.com/samalehzen/hyper/blob/main/LICENSE",
@@ -101,7 +101,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="fr" suppressHydrationWarning>
       <body>
         <script
           // biome-ignore lint/security/noDangerouslySetInnerHtml: This is necessary to apply the user's preferred color scheme before React hydration to prevent a flash of incorrect theme.
