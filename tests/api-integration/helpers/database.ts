@@ -84,6 +84,9 @@ export async function resetTestDatabase() {
 
   await db.execute(
     sql.raw(`
+      BEGIN;
+      SET LOCAL lock_timeout = '10s';
+      SET LOCAL statement_timeout = '30s';
       TRUNCATE TABLE
         "activity",
         "account",
@@ -109,7 +112,8 @@ export async function resetTestDatabase() {
         "workspace",
         "workspace_member",
         "user"
-      RESTART IDENTITY CASCADE
+      RESTART IDENTITY CASCADE;
+      COMMIT;
     `),
   );
 }

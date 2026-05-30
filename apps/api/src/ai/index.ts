@@ -72,13 +72,15 @@ ai.post(
         v.string(),
         v.minLength(1, "Workspace ID is required"),
       ),
+      images: v.optional(v.array(v.string())),
     }),
   ),
   workspaceAccess.fromBody("workspaceId"),
   async (c) => {
     const userId = c.get("userId");
-    const { message, conversationId, workspaceId } = c.req.valid("json");
-    return await chat({ userId, workspaceId, conversationId, message });
+    const { message, conversationId, workspaceId, images } =
+      c.req.valid("json");
+    return await chat({ userId, workspaceId, conversationId, message, images });
   },
 );
 

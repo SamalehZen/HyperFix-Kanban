@@ -4,11 +4,27 @@ import { createOpenAI } from "@ai-sdk/openai";
 import type { LanguageModel } from "ai";
 import { HTTPException } from "hono/http-exception";
 
+/**
+ * Returns true when the AI assistant has enough configuration to run.
+ * - google / openai: require an API key.
+ * - google-vertex: requires a GCP project (auth handled by ADC).
+ */
+export function isAiConfigured(): boolean {
+  const provider = process.env.AI_PROVIDER;
+  if (!provider) return false;
+
+  if (provider === "google-vertex") {
+    return Boolean(process.env.VERTEX_PROJECT);
+  }
+
+  return Boolean(process.env.AI_API_KEY);
+}
+
 export function getModel(): LanguageModel {
   const provider = process.env.AI_PROVIDER;
   const apiKey = process.env.AI_API_KEY;
 
-  if (!provider || (provider !== "google-vertex" && !apiKey)) {
+  if (!isAiConfigured()) {
     throw new HTTPException(503, {
       message: "AI Assistant is not configured on this server.",
     });
@@ -27,7 +43,8 @@ export function getModel(): LanguageModel {
         project: process.env.VERTEX_PROJECT,
         location: process.env.VERTEX_LOCATION || "us-central1",
       });
-      return vertex.chat(process.env.AI_MODEL || "gemini-2.0-flash");
+      // AI SDK v6: the Vertex provider is callable; there is no `.chat()`.
+      return vertex(process.env.AI_MODEL || "gemini-2.0-flash");
     }
     default: {
       const google = createGoogleGenerativeAI({

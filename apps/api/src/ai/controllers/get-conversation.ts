@@ -28,14 +28,18 @@ export async function getConversation(
     .where(eq(aiMessageTable.conversationId, conversationId))
     .orderBy(aiMessageTable.createdAt);
 
+  // Return messages in the Vercel AI SDK v6 UIMessage shape (role + parts) so
+  // the frontend `useChat` can render them directly on reload. Only user and
+  // assistant text is surfaced; internal tool rows are skipped.
   return {
     ...conversation,
-    messages: messages.map((m) => ({
-      id: m.id,
-      role: m.role as "user" | "assistant" | "system" | "tool",
-      content: m.content,
-      createdAt: m.createdAt,
-      ...(m.toolCalls ? { toolInvocations: m.toolCalls } : {}),
-    })),
+    messages: messages
+      .filter((m) => m.role === "user" || m.role === "assistant")
+      .map((m) => ({
+        id: m.id,
+        role: m.role as "user" | "assistant",
+        parts: [{ type: "text" as const, text: m.content }],
+        createdAt: m.createdAt,
+      })),
   };
 }

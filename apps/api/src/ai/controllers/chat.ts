@@ -1,128 +1,178 @@
-import { streamText } from "ai";
+import { type ModelMessage, stepCountIs, streamText } from "ai";
 import { eq } from "drizzle-orm";
 import { HTTPException } from "hono/http-exception";
 import db from "../../database";
 import { aiConversationTable, aiMessageTable } from "../../database/schema";
-import { SYSTEM_PROMPT } from "../prompt";
+import { getSystemPrompt } from "../prompt";
 import { getModel } from "../provider";
 import { getAiTools } from "../tools";
+
+type ImagePart = { type: "image"; image: string | URL };
+type TextPart = { type: "text"; text: string };
+
+function toImagePart(src: string): ImagePart {
+  // Accept absolute http(s) URLs and data URLs; pass through to the model.
+  if (/^https?:\/\//i.test(src)) {
+    return { type: "image", image: new URL(src) };
+  }
+  return { type: "image", image: src };
+}
 
 export async function chat({
   userId,
   workspaceId,
   conversationId,
   message,
+  images,
 }: {
   userId: string;
   workspaceId: string;
   conversationId?: string;
   message: string;
+  images?: string[];
 }) {
-  let convId = conversationId;
+  // 1. Resolve (and authorize) or create the conversation.
+  const convId = await resolveConversationId({
+    conversationId,
+    userId,
+    workspaceId,
+    message,
+  });
 
-  // 1. Si pas d'ID de conversation, on crée une nouvelle conversation. Sinon on vérifie la sécurité.
-  if (convId) {
-    const [existingConv] = await db
-      .select()
-      .from(aiConversationTable)
-      .where(eq(aiConversationTable.id, convId))
-      .limit(1);
-
-    if (!existingConv || existingConv.userId !== userId) {
-      throw new HTTPException(404, { message: "Conversation not found" });
-    }
-  } else {
-    const [conv] = await db
-      .insert(aiConversationTable)
-      .values({
-        userId,
-        workspaceId,
-        title: message.slice(0, 50) + (message.length > 50 ? "..." : ""),
-      })
-      .returning();
-    convId = conv.id;
-  }
-
-  // 2. Sauvegarder le message de l'utilisateur
+  // 2. Persist the user message.
   await db.insert(aiMessageTable).values({
     conversationId: convId,
     role: "user",
     content: message,
   });
 
-  // 3. Charger l'historique complet de la conversation
+  // 3. Load the conversation transcript (user/assistant text only) and convert
+  //    it into Vercel AI SDK ModelMessages. Tool-call rows are intentionally
+  //    not replayed as model input to keep the transcript valid and robust.
   const rawHistory = await db
     .select()
     .from(aiMessageTable)
     .where(eq(aiMessageTable.conversationId, convId))
     .orderBy(aiMessageTable.createdAt);
 
-  // 4. Formater les messages pour le Vercel AI SDK
-  const formattedMessages = rawHistory.map((m) => {
-    // biome-ignore lint/suspicious/noExplicitAny: Vercel AI SDK compatibility
-    const msg: any = {
-      id: m.id,
-      role: m.role as "user" | "assistant" | "system" | "tool",
-      content: m.content,
-    };
-    if (m.toolCalls) {
-      // Vercel AI SDK s'attend à "toolInvocations" pour l'historique côté client
-      msg.toolInvocations = m.toolCalls;
+  const textHistory = rawHistory.filter(
+    (m) => m.role === "user" || m.role === "assistant",
+  );
+
+  const messages: ModelMessage[] = textHistory.map((m, index) => {
+    const isLastUser = index === textHistory.length - 1 && m.role === "user";
+
+    if (isLastUser && images && images.length > 0) {
+      const parts: Array<TextPart | ImagePart> = [
+        { type: "text", text: m.content },
+        ...images.map(toImagePart),
+      ];
+      return { role: "user", content: parts } as ModelMessage;
     }
-    return msg;
+
+    return {
+      role: m.role as "user" | "assistant",
+      content: m.content,
+    } as ModelMessage;
   });
 
-  // 5. Appeler streamText avec function-calling récursif (maxSteps)
+  // 4. Stream the response with recursive tool-calling (multi-step).
   const result = streamText({
     model: getModel(),
-    system: SYSTEM_PROMPT,
-    messages: formattedMessages,
+    system: getSystemPrompt({
+      workspaceId,
+      today: new Date().toISOString().slice(0, 10),
+    }),
+    messages,
     tools: getAiTools(userId),
-    maxSteps: 5,
-    onFinish: async (summary) => {
-      // 6. Sauvegarder récursivement toutes les étapes intermédiaires d'appel d'outils et de résultats
-      for (const step of summary.steps) {
-        if (step.toolCalls.length > 0) {
-          // Enregistrer l'appel de l'assistant avec les toolCalls
-          await db.insert(aiMessageTable).values({
-            conversationId: convId,
-            role: "assistant",
-            content: step.text || "",
-            toolCalls: step.toolCalls,
-          });
-
-          // Enregistrer les réponses d'outils correspondantes (role: "tool")
-          for (const res of step.toolResults) {
-            await db.insert(aiMessageTable).values({
-              conversationId: convId,
-              role: "tool",
-              content:
-                typeof res.result === "string"
-                  ? res.result
-                  : JSON.stringify(res.result),
-              // biome-ignore lint/suspicious/noExplicitAny: Vercel AI SDK compatibility
-              toolCalls: [res] as any, // Stocker le détail de l'invocation pour référence
-            });
-          }
-        }
+    stopWhen: stepCountIs(8),
+    onError: ({ error }) => {
+      console.error("AI chat stream error:", error);
+    },
+    onFinish: async ({ text, steps }) => {
+      const finalText = text?.trim();
+      let contentToSave = finalText ?? "";
+      if (!contentToSave) {
+        const usedTools = steps?.some((s) => s.toolCalls.length > 0);
+        contentToSave = usedTools ? "✅ Action(s) effectuée(s)." : "";
       }
 
-      // Enregistrer le message de texte final s'il existe
-      if (summary.text) {
+      if (contentToSave) {
         await db.insert(aiMessageTable).values({
           conversationId: convId,
           role: "assistant",
-          content: summary.text,
+          content: contentToSave,
         });
       }
+
+      // Bump conversation so it sorts to the top of the recent list.
+      await db
+        .update(aiConversationTable)
+        .set({ updatedAt: new Date() })
+        .where(eq(aiConversationTable.id, convId));
     },
   });
 
-  // Renvoyer le flux avec l'en-tête de l'ID de conversation
-  return result.toDataStreamResponse({
+  // 5. Return the UI message stream (AI SDK v6) with the conversation id header.
+  return result.toUIMessageStreamResponse({
     headers: {
       "X-Conversation-Id": convId,
-      "Access-Control-Expose-Headers": "X-Conversation-Id", // Permettre d'y accéder côté client
+      "Access-Control-Expose-Headers": "X-Conversation-Id",
+    },
+    onError: (error) => {
+      if (error instanceof HTTPException) return error.message;
+      if (error instanceof Error) return error.message;
+      return "Une erreur est survenue avec l'assistant IA.";
     },
   });
+}
+
+async function resolveConversationId({
+  conversationId,
+  userId,
+  workspaceId,
+  message,
+}: {
+  conversationId?: string;
+  userId: string;
+  workspaceId: string;
+  message: string;
+}): Promise<string> {
+  if (conversationId) {
+    const [existing] = await db
+      .select()
+      .from(aiConversationTable)
+      .where(eq(aiConversationTable.id, conversationId))
+      .limit(1);
+
+    if (
+      !existing ||
+      existing.userId !== userId ||
+      existing.workspaceId !== workspaceId
+    ) {
+      throw new HTTPException(404, { message: "Conversation not found" });
+    }
+    return conversationId;
+  }
+
+  const title =
+    message.slice(0, 50) + (message.length > 50 ? "..." : "") ||
+    "Nouvelle conversation";
+
+  const [conv] = await db
+    .insert(aiConversationTable)
+    .values({
+      userId,
+      workspaceId,
+      title,
+    })
+    .returning();
+
+  if (!conv) {
+    throw new HTTPException(500, {
+      message: "Failed to create conversation",
+    });
+  }
+
+  return conv.id;
 }
