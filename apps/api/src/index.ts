@@ -16,6 +16,7 @@ import {
 } from "hono-openapi";
 import * as v from "valibot";
 import activity from "./activity";
+import ai from "./ai";
 import { auth } from "./auth";
 import column from "./column";
 import comment from "./comment";
@@ -500,6 +501,7 @@ export function createApp() {
   const workflowRuleApi = api.route("/workflow-rule", workflowRule);
   const invitationApi = api.route("/invitation", invitation);
   const workspaceApi = api.route("/workspace", workspace);
+  const aiApi = api.route("/ai", ai);
 
   app.route(
     "/",
@@ -592,6 +594,7 @@ export function createApp() {
     workflowRuleApi,
     workspaceApi,
     oauthApi,
+    aiApi,
   };
 }
 
@@ -731,6 +734,7 @@ export type AppType =
   | typeof workspaceApi
   | typeof publicProjectApi
   | typeof invitationPublicApi
-  | typeof oauthApi;
+  | typeof oauthApi
+  | typeof aiApi;
 
 export default app;

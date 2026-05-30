@@ -1,0 +1,2 @@
+CREATE INDEX "ai_conversation_user_workspace_updated_idx" ON "ai_conversation" USING btree ("user_id","workspace_id","updated_at");--> statement-breakpoint
+CREATE INDEX "ai_message_conv_created_idx" ON "ai_message" USING btree ("conversation_id","created_at");

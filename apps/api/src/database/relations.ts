@@ -2,6 +2,8 @@ import { relations } from "drizzle-orm";
 import {
   accountTable,
   activityTable,
+  aiConversationTable,
+  aiMessageTable,
   apikeyTable,
   assetTable,
   columnTable,
@@ -386,5 +388,27 @@ export const commentTableRelations = relations(commentTable, ({ one }) => ({
   user: one(userTable, {
     fields: [commentTable.userId],
     references: [userTable.id],
+  }),
+}));
+
+export const aiConversationTableRelations = relations(
+  aiConversationTable,
+  ({ one, many }) => ({
+    user: one(userTable, {
+      fields: [aiConversationTable.userId],
+      references: [userTable.id],
+    }),
+    workspace: one(workspaceTable, {
+      fields: [aiConversationTable.workspaceId],
+      references: [workspaceTable.id],
+    }),
+    messages: many(aiMessageTable),
+  }),
+);
+
+export const aiMessageTableRelations = relations(aiMessageTable, ({ one }) => ({
+  conversation: one(aiConversationTable, {
+    fields: [aiMessageTable.conversationId],
+    references: [aiConversationTable.id],
   }),
 }));

@@ -1,6 +1,6 @@
-FROM node:20.20.2-alpine AS api-builder
+FROM node:20.20.2-slim AS api-builder
 
-RUN apk add --no-cache python3 make g++ && \
+RUN apt-get update && apt-get install -y --no-install-recommends python3 make g++ && \
   corepack enable && \
   corepack prepare pnpm@10.32.1 --activate
 
@@ -25,7 +25,7 @@ RUN pnpm run build
 WORKDIR /app/apps/api
 RUN pnpm run build
 
-FROM node:20.20.2-alpine AS api-runtime
+FROM node:20.20.2-slim AS api-runtime
 
 WORKDIR /app
 
@@ -44,9 +44,9 @@ COPY --from=api-builder /app/apps/api/dist ./apps/api/dist
 COPY --from=api-builder /app/apps/api/drizzle ./apps/api/drizzle
 COPY --from=api-builder /app/packages/email ./packages/email
 
-FROM node:20.20.2-alpine AS web-builder
+FROM node:20.20.2-slim AS web-builder
 
-RUN apk add --no-cache python3 make g++ && \
+RUN apt-get update && apt-get install -y --no-install-recommends python3 make g++ && \
   corepack enable && \
   corepack prepare pnpm@10.32.1 --activate
 
@@ -67,15 +67,16 @@ COPY apps/web ./apps/web
 WORKDIR /app/apps/web
 RUN pnpm run build
 
-FROM node:20.20.2-alpine AS runtime
+FROM node:20.20.2-slim AS runtime
 
-RUN apk add --no-cache nginx && \
-  addgroup -g 1001 appuser && \
-  adduser -u 1001 -G appuser -D appuser && \
+RUN apt-get update && apt-get install -y --no-install-recommends nginx wget && \
+  groupadd -g 1001 appuser && \
+  useradd -u 1001 -g appuser -m -s /bin/sh appuser && \
   mkdir -p /app /app/apps/api/data /var/cache/nginx /var/run/nginx /var/log/nginx /var/lib/nginx/logs /var/lib/nginx/tmp /usr/share/nginx/html /docker-entrypoint.d && \
   chown -R appuser:appuser /app /app/apps/api/data /var/cache/nginx /var/run/nginx /var/log/nginx /var/lib/nginx /usr/share/nginx/html /docker-entrypoint.d && \
   touch /var/run/nginx.pid && \
   chown appuser:appuser /var/run/nginx.pid && \
+  apt-get clean && rm -rf /var/lib/apt/lists/* && \
   printf 'worker_processes auto;\nerror_log /var/log/nginx/error.log warn;\npid /var/run/nginx.pid;\nevents { worker_connections 1024; }\nhttp {\n  include /etc/nginx/mime.types;\n  default_type application/octet-stream;\n  include /etc/nginx/conf.d/*.conf;\n}\n' > /etc/nginx/nginx.conf
 
 WORKDIR /app

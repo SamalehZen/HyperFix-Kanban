@@ -13,6 +13,7 @@
 		"test:watch": "vitest --config vitest.config.ts"
 	},
 	"dependencies": {
+		"@ai-sdk/react": "^3.0.195",
 		"@base-ui/react": "^1.2.0",
 		"@better-auth/api-key": "^1.6.9",
 		"@dnd-kit/core": "^6.3.1",
@@ -63,6 +64,7 @@
 		"@tiptap/starter-kit": "^3.22.5",
 		"@types/file-saver": "^2.0.7",
 		"@vitejs/plugin-react": "^5.1.4",
+		"ai": "^6.0.193",
 		"babel-plugin-react-compiler": "^19.0.0-beta-714736e-20250131",
 		"better-auth": "^1.6.9",
 		"class-variance-authority": "^0.7.1",

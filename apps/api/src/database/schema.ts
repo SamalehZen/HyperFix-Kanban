@@ -856,6 +856,68 @@ export const deviceCodeTable = pgTable(
   ],
 );
 
+export const aiConversationTable = pgTable(
+  "ai_conversation",
+  {
+    id: text("id")
+      .$defaultFn(() => createId())
+      .primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => userTable.id, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }),
+    workspaceId: text("workspace_id")
+      .notNull()
+      .references(() => workspaceTable.id, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }),
+    title: text("title").notNull().default("Nouvelle conversation"),
+    createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { mode: "date" })
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
+  },
+  (table) => [
+    index("ai_conversation_userId_idx").on(table.userId),
+    index("ai_conversation_workspaceId_idx").on(table.workspaceId),
+    index("ai_conversation_user_workspace_updated_idx").on(
+      table.userId,
+      table.workspaceId,
+      table.updatedAt,
+    ),
+  ],
+);
+
+export const aiMessageTable = pgTable(
+  "ai_message",
+  {
+    id: text("id")
+      .$defaultFn(() => createId())
+      .primaryKey(),
+    conversationId: text("conversation_id")
+      .notNull()
+      .references(() => aiConversationTable.id, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }),
+    role: text("role").notNull(),
+    content: text("content").notNull(),
+    toolCalls: jsonb("tool_calls"),
+    createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+  },
+  (table) => [
+    index("ai_message_conversationId_idx").on(table.conversationId),
+    index("ai_message_conv_created_idx").on(
+      table.conversationId,
+      table.createdAt,
+    ),
+  ],
+);
+
 // Auth-schema compatible aliases in schema.ts
 export const user = userTable;
 export const session = sessionTable;

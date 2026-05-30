@@ -1035,6 +1035,7 @@
 		"sidebar": {
 			"overview": "Overview",
 			"projects": "Projects",
+			"aiAssistant": "AI Assistant",
 			"members": "Members",
 			"invitations": "Invitations",
 			"more": "More",

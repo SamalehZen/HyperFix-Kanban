@@ -27,6 +27,7 @@ import { Route as LayoutAuthenticatedProfileSetupRouteImport } from './routes/_l
 import { Route as LayoutAuthenticatedOnboardingRouteImport } from './routes/_layout/_authenticated/onboarding'
 import { Route as LayoutAuthenticatedInvitationsRouteImport } from './routes/_layout/_authenticated/invitations'
 import { Route as LayoutAuthenticatedDashboardRouteImport } from './routes/_layout/_authenticated/dashboard'
+import { Route as LayoutAuthenticatedAiRouteImport } from './routes/_layout/_authenticated/ai'
 import { Route as LayoutAuthenticatedDashboardIndexRouteImport } from './routes/_layout/_authenticated/dashboard/index'
 import { Route as LayoutAuthenticatedDashboardSettingsRouteImport } from './routes/_layout/_authenticated/dashboard/settings'
 import { Route as LayoutAuthenticatedDashboardInvitationsRouteImport } from './routes/_layout/_authenticated/dashboard/invitations'
@@ -146,6 +147,11 @@ const LayoutAuthenticatedDashboardRoute =
     path: '/dashboard',
     getParentRoute: () => LayoutAuthenticatedRoute,
   } as any)
+const LayoutAuthenticatedAiRoute = LayoutAuthenticatedAiRouteImport.update({
+  id: '/ai',
+  path: '/ai',
+  getParentRoute: () => LayoutAuthenticatedRoute,
+} as any)
 const LayoutAuthenticatedDashboardIndexRoute =
   LayoutAuthenticatedDashboardIndexRouteImport.update({
     id: '/',
@@ -332,6 +338,7 @@ export interface FileRoutesByFullPath {
   '/device/approve': typeof DeviceApproveRoute
   '/public-project/$projectId': typeof PublicProjectProjectIdRoute
   '/device/': typeof DeviceIndexRoute
+  '/ai': typeof LayoutAuthenticatedAiRoute
   '/dashboard': typeof LayoutAuthenticatedDashboardRouteWithChildren
   '/invitations': typeof LayoutAuthenticatedInvitationsRoute
   '/onboarding': typeof LayoutAuthenticatedOnboardingRoute
@@ -374,6 +381,7 @@ export interface FileRoutesByTo {
   '/device/approve': typeof DeviceApproveRoute
   '/public-project/$projectId': typeof PublicProjectProjectIdRoute
   '/device': typeof DeviceIndexRoute
+  '/ai': typeof LayoutAuthenticatedAiRoute
   '/invitations': typeof LayoutAuthenticatedInvitationsRoute
   '/onboarding': typeof LayoutAuthenticatedOnboardingRoute
   '/profile-setup': typeof LayoutAuthenticatedProfileSetupRoute
@@ -418,6 +426,7 @@ export interface FileRoutesById {
   '/device/approve': typeof DeviceApproveRoute
   '/public-project/$projectId': typeof PublicProjectProjectIdRoute
   '/device/': typeof DeviceIndexRoute
+  '/_layout/_authenticated/ai': typeof LayoutAuthenticatedAiRoute
   '/_layout/_authenticated/dashboard': typeof LayoutAuthenticatedDashboardRouteWithChildren
   '/_layout/_authenticated/invitations': typeof LayoutAuthenticatedInvitationsRoute
   '/_layout/_authenticated/onboarding': typeof LayoutAuthenticatedOnboardingRoute
@@ -463,6 +472,7 @@ export interface FileRouteTypes {
     | '/device/approve'
     | '/public-project/$projectId'
     | '/device/'
+    | '/ai'
     | '/dashboard'
     | '/invitations'
     | '/onboarding'
@@ -505,6 +515,7 @@ export interface FileRouteTypes {
     | '/device/approve'
     | '/public-project/$projectId'
     | '/device'
+    | '/ai'
     | '/invitations'
     | '/onboarding'
     | '/profile-setup'
@@ -548,6 +559,7 @@ export interface FileRouteTypes {
     | '/device/approve'
     | '/public-project/$projectId'
     | '/device/'
+    | '/_layout/_authenticated/ai'
     | '/_layout/_authenticated/dashboard'
     | '/_layout/_authenticated/invitations'
     | '/_layout/_authenticated/onboarding'
@@ -716,6 +728,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof LayoutAuthenticatedDashboardRouteImport
+      parentRoute: typeof LayoutAuthenticatedRoute
+    }
+    '/_layout/_authenticated/ai': {
+      id: '/_layout/_authenticated/ai'
+      path: '/ai'
+      fullPath: '/ai'
+      preLoaderRoute: typeof LayoutAuthenticatedAiRouteImport
       parentRoute: typeof LayoutAuthenticatedRoute
     }
     '/_layout/_authenticated/dashboard/': {
@@ -1044,6 +1063,7 @@ const LayoutAuthenticatedDashboardRouteWithChildren =
   )
 
 interface LayoutAuthenticatedRouteChildren {
+  LayoutAuthenticatedAiRoute: typeof LayoutAuthenticatedAiRoute
   LayoutAuthenticatedDashboardRoute: typeof LayoutAuthenticatedDashboardRouteWithChildren
   LayoutAuthenticatedInvitationsRoute: typeof LayoutAuthenticatedInvitationsRoute
   LayoutAuthenticatedOnboardingRoute: typeof LayoutAuthenticatedOnboardingRoute
@@ -1051,6 +1071,7 @@ interface LayoutAuthenticatedRouteChildren {
 }
 
 const LayoutAuthenticatedRouteChildren: LayoutAuthenticatedRouteChildren = {
+  LayoutAuthenticatedAiRoute: LayoutAuthenticatedAiRoute,
   LayoutAuthenticatedDashboardRoute:
     LayoutAuthenticatedDashboardRouteWithChildren,
   LayoutAuthenticatedInvitationsRoute: LayoutAuthenticatedInvitationsRoute,

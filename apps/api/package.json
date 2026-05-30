@@ -27,6 +27,9 @@
     "db:seed:user-data": "tsx scripts/seed-user-data.ts"
   },
   "dependencies": {
+    "@ai-sdk/google": "^3.0.80",
+    "@ai-sdk/google-vertex": "^4.0.140",
+    "@ai-sdk/openai": "^3.0.67",
     "@aws-sdk/client-s3": "^3.1009.0",
     "@aws-sdk/s3-request-presigner": "^3.1041.0",
     "@better-auth/api-key": "^1.6.9",
@@ -41,6 +44,7 @@
     "@oslojs/encoding": "^1.1.0",
     "@paralleldrive/cuid2": "^3.3.0",
     "@valibot/to-json-schema": "^1.5.0",
+    "ai": "^6.0.193",
     "bcrypt": "^6.0.0",
     "better-auth": "^1.6.9",
     "croner": "^10.0.1",

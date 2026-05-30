@@ -1,8 +1,8 @@
 # Build stage
-FROM --platform=$BUILDPLATFORM node:20.20.2-alpine AS builder
+FROM --platform=$BUILDPLATFORM node:20.20.2-slim AS builder
 
 # Install build dependencies in a single layer
-RUN apk add --no-cache python3 make g++ && \
+RUN apt-get update && apt-get install -y --no-install-recommends python3 make g++ && \
   corepack enable && \
   corepack prepare pnpm@10.7.0 --activate
 
@@ -34,13 +34,15 @@ RUN sed -i 's/"extends": "@hyperfix\/typescript-config\/base.json"/"extends": ".
   pnpm run build
 
 # Production stage - use specific version tag without SHA256
-FROM node:20.20.2-alpine AS runtime
+FROM node:20.20.2-slim AS runtime
 
 # Set up user in a single layer
-RUN addgroup -g 1001 appuser && \
-  adduser -u 1001 -G appuser -D appuser && \
+RUN apt-get update && apt-get install -y --no-install-recommends wget && \
+  groupadd -g 1001 appuser && \
+  useradd -u 1001 -g appuser -m -s /bin/sh appuser && \
   mkdir -p /app/apps/api/data && \
-  chown -R appuser:appuser /app
+  chown -R appuser:appuser /app && \
+  apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
