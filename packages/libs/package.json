@@ -10,11 +10,11 @@
 		"test:watch": "vitest --config vitest.config.ts"
 	},
 	"devDependencies": {
-		"@types/react": "^19.2.14",
+		"@types/react": "^19.2.17",
 		"@types/react-dom": "^19.2.3",
 		"@hyperfix/api": "workspace:*",
 		"hono": "^4.12.14",
-		"react": "^19.2.5",
+		"react": "^19.2.7",
 		"@hyperfix/typescript-config": "workspace:*",
 		"typescript": "^5.9.2",
 		"vite": "^7.3.2",
