@@ -18,6 +18,6 @@
 		"@hyperfix/typescript-config": "workspace:*",
 		"typescript": "^5.9.2",
 		"vite": "^7.3.2",
-		"vitest": "^4.1.5"
+		"vitest": "^4.1.8"
 	}
 }
