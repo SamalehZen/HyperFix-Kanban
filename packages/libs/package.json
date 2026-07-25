@@ -13,7 +13,7 @@
 		"@types/react": "^19.2.14",
 		"@types/react-dom": "^19.2.3",
 		"@hyperfix/api": "workspace:*",
-		"hono": "^4.12.14",
+		"hono": "^4.12.32",
 		"react": "^19.2.5",
 		"@hyperfix/typescript-config": "workspace:*",
 		"typescript": "^5.9.2",
